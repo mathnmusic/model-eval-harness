@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: uv sync --group dev
-      - run: uv run pytest --cov=src/model_eval_harness --cov-report=term --cov-report=xml --cov-fail-under=70
+      - run: uv run pytest --cov=src/model_eval_harness --cov-report=term --cov-report=xml --cov-fail-under=80
       - uses: codecov/codecov-action@v7
         if: matrix.python-version == '3.12'
         with:
