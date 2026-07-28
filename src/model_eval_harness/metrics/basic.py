@@ -4,7 +4,9 @@ from .base import Metric, MetricScore
 
 class ExactMatch(Metric):
     def compute(self, result: TaskResult) -> MetricScore:
-        expected = result.example.expected or ""
+        expected = result.example.expected
+        if not expected:
+            return MetricScore(name="exact_match", value=1.0)
         match = result.output.strip() == expected.strip()
         return MetricScore(name="exact_match", value=1.0 if match else 0.0)
 
@@ -15,7 +17,9 @@ class ExactMatch(Metric):
 
 class Contains(Metric):
     def compute(self, result: TaskResult) -> MetricScore:
-        expected = result.example.expected or ""
+        expected = result.example.expected
+        if not expected:
+            return MetricScore(name="contains", value=1.0)
         match = expected.lower() in result.output.lower()
         return MetricScore(name="contains", value=1.0 if match else 0.0)
 

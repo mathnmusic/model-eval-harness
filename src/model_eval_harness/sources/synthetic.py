@@ -20,17 +20,18 @@ class SyntheticSource(Source):
     def _generate(self) -> None:
         if self._generated:
             return
+        needed = self._count - len(self._examples)
         if not self._model:
-            self._examples = [
-                EvalExample(
-                    input=f"[synthetic:{self._spec}] Example {i + 1}",
-                    expected=None,
-                    metadata={"source": "synthetic", "index": i},
+            for _ in range(needed):
+                self._examples.append(
+                    EvalExample(
+                        input=f"[synthetic:{self._spec}] Example {len(self._examples) + 1}",
+                        expected=None,
+                        metadata={"source": "synthetic", "index": len(self._examples)},
+                    )
                 )
-                for i in range(self._count)
-            ]
         else:
-            for _ in range(self._count - len(self._examples)):
+            for _ in range(needed):
                 example = self._generate_one()
                 if example:
                     self._examples.append(example)

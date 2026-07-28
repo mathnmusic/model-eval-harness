@@ -102,8 +102,8 @@ def main() -> None:
 
 @main.command()
 @click.argument("config", type=click.Path(exists=True))
-@click.option("--async/--no-async", default=False, help="Run with async concurrency")
-def run(config: str, async_: bool) -> None:
+@click.option("--async-run/--no-async-run", default=False, help="Run with async concurrency")
+def run(config: str, async_run: bool) -> None:
     """Run an evaluation from a YAML config file."""
     cfg = EvalConfig.from_yaml(config)
 
@@ -114,7 +114,7 @@ def run(config: str, async_: bool) -> None:
 
     harness = Harness(source=source, task=task, model=model, metrics=metrics)
 
-    if async_:
+    if async_run:
         with console.status("[bold green]Running evaluation (async)..."):
             result = asyncio.run(harness.run_async(concurrency=cfg.concurrency or 10))
         result.print_report()
@@ -139,7 +139,7 @@ def run(config: str, async_: bool) -> None:
 @click.option("--task-type", "-t", type=click.Choice(TASKS.keys()), default="text-generation")
 @click.option("--metric", type=click.Choice(METRICS.keys()), multiple=True)
 @click.option("--api-key", envvar="OPENAI_API_KEY", help="OpenAI API key")
-@click.option("--async/--no-async", default=False, help="Run with async concurrency")
+@click.option("--async-run/--no-async-run", default=False, help="Run with async concurrency")
 def quick(
     source_type: str,
     source_path: str | None,
@@ -151,7 +151,7 @@ def quick(
     task_type: str,
     metric: tuple[str, ...],
     api_key: str | None,
-    async_: bool,
+    async_run: bool,
 ) -> None:
     """Quick evaluation from the command line."""
     if not source_path:
@@ -190,7 +190,7 @@ def quick(
 
     harness = Harness(source=source, task=task, model=model_instance, metrics=chosen_metrics)
 
-    if async_:
+    if async_run:
         with console.status("[bold green]Running evaluation (async)..."):
             result = asyncio.run(harness.run_async())
         result.print_report()
