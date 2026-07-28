@@ -1,13 +1,12 @@
-from dataclasses import dataclass, field
-from typing import Any
+from dataclasses import dataclass
 
 from rich.console import Console
-from rich.progress import Progress, TaskID
+from rich.progress import Progress
 from rich.table import Table
 
 from .metrics.base import Metric, MetricScore
 from .models.base import Model
-from .sources.base import Source
+from .sources.base import EvalExample, Source
 from .tasks.base import Task, TaskResult
 
 
@@ -67,14 +66,14 @@ class Harness:
         examples = list(self.source.load())
         semaphore = asyncio.Semaphore(concurrency)
 
-        async def run_one(example):
+        async def run_one(example: EvalExample) -> TaskResult:
             async with semaphore:
                 return await self._run_example_async(example)
 
         results = await asyncio.gather(*[run_one(e) for e in examples])
         return self._build_result(list(results))
 
-    async def _run_example_async(self, example):
+    async def _run_example_async(self, example: EvalExample) -> TaskResult:
         prompt = self.task.build_prompt(example)
         import time
 
