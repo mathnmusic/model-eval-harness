@@ -63,7 +63,7 @@ jobs:
           python-version: "3.12"
       - run: uv sync --group dev
       - run: uv export --no-dev --no-hashes --format requirements-txt > /tmp/requirements.txt
-      - uses: pypa/pip-audit@v1
+      - uses: pypa/gh-action-pip-audit@v1.1.0
         with:
           inputs: /tmp/requirements.txt
         continue-on-error: true
