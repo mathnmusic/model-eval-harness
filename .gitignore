@@ -8,3 +8,4 @@
 # Gas City
 .beads/*
 !.beads/identity.toml
+site/
