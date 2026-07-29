@@ -100,3 +100,24 @@ def test_harness_passed() -> None:
     result = harness.run()
 
     assert isinstance(result.passed(threshold=0.0), bool)
+
+
+def test_harness_fails_threshold() -> None:
+    source = FakeSource(examples=[EvalExample(input="hi", expected="hello")])
+    task = FakeTask()
+    model = FakeModel()
+    metric = ExactMatch()
+
+    harness = Harness(source=source, task=task, model=model, metrics=[metric])
+    result = harness.run()
+    assert result.passed(threshold=1.0) is False
+
+
+def test_harness_no_metrics() -> None:
+    source = FakeSource(examples=[EvalExample(input="a", expected="b")])
+    task = FakeTask()
+    model = FakeModel()
+
+    harness = Harness(source=source, task=task, model=model)
+    result = harness.run()
+    assert result.passed() is False

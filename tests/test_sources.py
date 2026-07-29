@@ -83,3 +83,33 @@ def test_synthetic_source_with_seed() -> None:
     assert len(source) == 3
     examples = list(source.load())
     assert examples[0].input == "seed input"
+
+
+class FakeSyntheticModel:
+    def generate(self, prompt: str | list[dict[str, str]], **kwargs: object) -> str:
+        return '{"input": "What is 2+2?", "expected": "4"}'
+
+    async def generate_async(self, prompt: str | list[dict[str, str]], **kwargs: object) -> str:
+        return '{"input": "What is 2+2?", "expected": "4"}'
+
+
+def test_synthetic_source_with_model() -> None:
+    model = FakeSyntheticModel()
+    source = SyntheticSource(spec="math problems", count=2, model=model)
+    examples = list(source.load())
+
+    assert len(examples) == 2
+    assert examples[0].input == "What is 2+2?"
+    assert examples[0].expected == "4"
+    assert examples[0].metadata["source"] == "synthetic"
+
+
+def test_synthetic_source_with_model_and_seed() -> None:
+    model = FakeSyntheticModel()
+    seed = [EvalExample(input="seed q", expected="seed a")]
+    source = SyntheticSource(spec="math", count=3, model=model, seed_examples=seed)
+    examples = list(source.load())
+
+    assert len(examples) == 3
+    assert examples[0].input == "seed q"
+    assert examples[1].input == "What is 2+2?"

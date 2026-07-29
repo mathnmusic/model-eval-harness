@@ -1,0 +1,59 @@
+site_name: model-eval-harness
+site_description: Framework for connecting testing data sources to LLM evaluations
+site_url: https://mathnmusic.github.io/model-eval-harness/
+repo_url: https://github.com/mathnmusic/model-eval-harness
+repo_name: mathnmusic/model-eval-harness
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Configuration: getting-started/configuration.md
+  - Guides:
+      - CLI Usage: guides/cli.md
+      - YAML Config: guides/yaml-config.md
+      - Async Evaluation: guides/async.md
+  - Reference:
+      - Sources: reference/sources.md
+      - Models: reference/models.md
+      - Tasks: reference/tasks.md
+      - Metrics: reference/metrics.md
+      - Harness API: reference/harness.md
+  - Contributing: contributing.md
