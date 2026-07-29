@@ -9,3 +9,5 @@
 .beads/*
 !.beads/identity.toml
 site/
+docs-review-result.json
+docs-review-comment.md
